@@ -27,7 +27,7 @@ async function getWorker() {
       const blinked = await service.handBlinked(video)
       if(!blinked) return;
       workerMock.onmessage({ data: { blinked }})
-     },
+    },
     //  vai ser sobreescrito pela controller
     onmessage(msg) { }
   }
@@ -39,16 +39,20 @@ async function getWorker() {
   return workerMock
 }
 
+const view = new View()
+const [rootPath] = window.location.href.split('/pages/')
+view.setVideoSrc(`${rootPath}/assets/video.mp4`)
+
 const worker = await getWorker()
 
 const camera = await Camera.init()
-const [rootPath] = window.location.href.split('/pages/')
+
 const factory = {
   async initialize() {
     return Controller.initialize({
       view: new View(),
       worker,
-      camera
+      camera,
     })
   }
 }
